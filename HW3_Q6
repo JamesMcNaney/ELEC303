@@ -1,0 +1,44 @@
+
+"""
+Code used for Homework 3, question 6
+Python
+"""
+import math
+
+def bin_weight(total_N, p, rand_X):
+    combo = math.factorial(total_N)/(math.factorial(total_N-rand_X)*math.factorial(rand_X))
+    return combo*(p)**(rand_X)*(1-p)**(total_N-rand_X)
+
+pmfX = [0]*101
+
+for paper in range(100):
+    pmfX[paper] = bin_weight(100, .6, paper)
+    
+#print(pmfX)    
+
+checksum = 0
+for entry in pmfX:
+    checksum = checksum + entry
+    
+#print(checksum)
+
+def average_profit(papers, pmf):
+    expected = 0
+    for prof in range(papers+1):
+        Z = -.1*papers + .35*prof
+        pofX = pmfX[prof]
+        expected = expected + Z*pofX
+    return expected
+    
+k = 50
+profit = average_profit(k, pmfX)
+
+print('The average profit os selling ', k, 'papers is', profit)
+    
+
+def add_prof(previous, current, pmf):
+    difference = average_profit(current, pmf) - average_profit(previous, pmf)
+    return difference
+
+for next in range(50):
+    print('The additional profit of selling ', k + next, 'papers is: ', add_prof(k + (next - 1),k+next,pmfX))
